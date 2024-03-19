@@ -8,7 +8,7 @@ const phoneRegex = /^010\d{8}$/;
 const roleArray = ["admin", "user"];
 
 // formSchema를 만들어줍니다.
-const SingUpFormSchema = z.object({
+export const SingUpFormSchema = z.object({
 
   username: z
   .string()

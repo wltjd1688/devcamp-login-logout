@@ -1,30 +1,22 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { SingUpFormSchema } from "@/vaildators/singupschema";
+import { ModeToggle } from "@/components/mode-toggle";
 
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -43,11 +35,9 @@ import {
 } from "@/components/ui/form";
 
 export default function CardWithForm() {
-  const { setTheme } = useTheme();
-
   // useForm을 사용하여 form을 만들어줍니다.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof SingUpFormSchema>>({
+    resolver: zodResolver(SingUpFormSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -59,9 +49,14 @@ export default function CardWithForm() {
   });
 
   // form을 제출했을 때 실행되는 함수
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  function onSubmit(data: z.infer<typeof SingUpFormSchema>) {
     // form 에서 password랑 passwordConfirm을 제외한 모든 데이터가 ""이 아닐때 다음으로 넘김
-    if (data.username !== "" && data.email !== "" && data.phone !== "" && data.role !== "") {
+    if (
+      data.username !== "" &&
+      data.email !== "" &&
+      data.phone !== "" &&
+      data.role !== ""
+    ) {
       if (data.password === data.passwordConfirm) {
         alert(JSON.stringify(data, null, 2));
       } else {
@@ -74,29 +69,7 @@ export default function CardWithForm() {
 
   return (
     <div className="min-h-screen">
-      {/* dark, light, system 모드를 토글할 수 있는 버튼을 추가합니다. */}
-      <div className="absolute top-6 right-6">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
-              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">Toggle theme</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setTheme("light")}>
-              Light
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("dark")}>
-              Dark
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("system")}>
-              System
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      <ModeToggle />
       {/* 중앙 로그인 */}
       <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
         <Card className="w-[380px]">
@@ -173,9 +146,7 @@ export default function CardWithForm() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit">
-                  Submit
-                </Button>
+                <Button type="submit">Submit</Button>
               </form>
             </CardContent>
           </Form>
