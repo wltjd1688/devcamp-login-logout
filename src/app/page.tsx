@@ -4,7 +4,7 @@ import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { SingUpFormSchema } from "@/vaildators/singupschema";
+import { singUpFormSchema } from "@/vaildators/singup-schema";
 import { ModeToggle } from "@/components/mode-toggle";
 
 import { Button } from "@/components/ui/button";
@@ -33,11 +33,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { toast } from "@/components/ui/use-toast";
 
 export default function CardWithForm() {
   // useForm을 사용하여 form을 만들어줍니다.
-  const form = useForm<z.infer<typeof SingUpFormSchema>>({
-    resolver: zodResolver(SingUpFormSchema),
+  const form = useForm<z.infer<typeof singUpFormSchema>>({
+    resolver: zodResolver(singUpFormSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -49,21 +50,14 @@ export default function CardWithForm() {
   });
 
   // form을 제출했을 때 실행되는 함수
-  function onSubmit(data: z.infer<typeof SingUpFormSchema>) {
+  function onSubmit(data: z.infer<typeof singUpFormSchema>) {
     // form 에서 password랑 passwordConfirm을 제외한 모든 데이터가 ""이 아닐때 다음으로 넘김
-    if (
-      data.username !== "" &&
-      data.email !== "" &&
-      data.phone !== "" &&
-      data.role !== ""
-    ) {
-      if (data.password === data.passwordConfirm) {
-        alert(JSON.stringify(data, null, 2));
-      } else {
-        alert("비밀번호가 일치하지 않습니다.");
-      }
+    if (data.password === data.passwordConfirm) {
+      alert(JSON.stringify(data, null, 2));
     } else {
-      alert("필수 정보를 입력해주세요.");
+      toast({
+        title: "비밀번호가 일치하지 않습니다.",
+      });
     }
   }
 
