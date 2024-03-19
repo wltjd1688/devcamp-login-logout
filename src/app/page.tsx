@@ -1,11 +1,14 @@
 "use client";
 
-import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { singUpFormSchema } from "@/vaildators/singup-schema";
 import { ModeToggle } from "@/components/mode-toggle";
+import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -33,9 +36,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
-export default function CardWithForm() {
+export default function Home() {
+  const [step, setStep] = useState<number>(0);
+  const { toast } = useToast();
   // useForm을 사용하여 form을 만들어줍니다.
   const form = useForm<z.infer<typeof singUpFormSchema>>({
     resolver: zodResolver(singUpFormSchema),
@@ -57,6 +62,7 @@ export default function CardWithForm() {
     } else {
       toast({
         title: "비밀번호가 일치하지 않습니다.",
+        variant: "destructive",
       });
     }
   }
@@ -75,72 +81,147 @@ export default function CardWithForm() {
             <CardContent>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-3"
+                className="relative overflow-x-hidden space-y-3"
               >
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>이름</FormLabel>
-                      <FormControl>
-                        <Input placeholder="홍길동" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>이메일</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="hello@sparta-devcamp.com"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>연락처</FormLabel>
-                      <FormControl>
-                        <Input placeholder="010000000000" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="role"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>역할</FormLabel>
-                      <Select onValueChange={field.onChange}>
+                <motion.div
+                  className={cn("space-y-3")}
+                  animate={{ translateX: `${step * -100}%` }}
+                  transition={{ ease: "easeInOut" }}
+                >
+                  <FormField
+                    control={form.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>이름</FormLabel>
                         <FormControl>
-                          <SelectTrigger id="framework">
-                            <SelectValue placeholder="역할을 선택해주세요" />
-                          </SelectTrigger>
+                          <Input placeholder="홍길동" {...field} />
                         </FormControl>
-                        <SelectContent position="popper">
-                          <SelectItem value="admin">관리자</SelectItem>
-                          <SelectItem value="user">일반사용자</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit">Submit</Button>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>이메일</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="hello@sparta-devcamp.com"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>연락처</FormLabel>
+                        <FormControl>
+                          <Input placeholder="010000000000" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="role"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>역할</FormLabel>
+                        <Select onValueChange={field.onChange}>
+                          <FormControl>
+                            <SelectTrigger id="framework">
+                              <SelectValue placeholder="역할을 선택해주세요" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent position="popper">
+                            <SelectItem value="admin">관리자</SelectItem>
+                            <SelectItem value="user">일반사용자</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+                <motion.div
+                  className={cn("space-y-3 absolute top-0 left-0 right-0")}
+                  animate={{ translateX: `${(1 - step) * 100}%` }}
+                  style={{ translateX: `${(1 - step) * 100}%` }}
+                  transition={{ ease: "easeInOut" }}
+                >
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>비밀번호</FormLabel>
+                        <FormControl>
+                          <Input type="password" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="passwordConfirm"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>비밀번호 확인</FormLabel>
+                        <FormControl>
+                          <Input type="password" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+                <div className={"flex gap-2"}>
+                  <Button className={cn({ hidden: step === 0 })} type="submit">
+                    계정 등록하기
+                  </Button>
+                  <Button
+                    type="button"
+                    className={cn({ hidden: step === 1 })}
+                    onClick={() => {
+                      form.trigger(["phone", "email", "username", "role"]);
+                      const phoneState = form.getFieldState("phone");
+                      const emailState = form.getFieldState("email");
+                      const usernameState = form.getFieldState("username");
+                      const roleState = form.getFieldState("role");
+
+                      if (!phoneState.isDirty || phoneState.invalid) return;
+                      if (!emailState.isDirty || emailState.invalid) return;
+                      if (!usernameState.isDirty || usernameState.invalid)
+                        return;
+                      if (!roleState.isDirty || roleState.invalid) return;
+
+                      setStep(1);
+                    }}
+                  >
+                    다음 단계로
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={"ghost"}
+                    className={cn({ hidden: step === 0 })}
+                    onClick={() => {
+                      setStep(0);
+                    }}
+                  >
+                    이전 단계로
+                  </Button>
+                </div>
               </form>
             </CardContent>
           </Form>
