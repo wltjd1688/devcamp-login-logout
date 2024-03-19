@@ -45,34 +45,6 @@ import {
 export default function CardWithForm() {
   const { setTheme } = useTheme();
 
-  // 스키마 확인하는 코드
-  const formSchema = z.object({
-    username: z.string().min(2, {
-      message: "이름은 2글자 이상이어야 합니다.",
-    }),
-    email: z.string().email({
-      message: "올바른 이메일을 입력해주세요.",
-    }),
-    phone: z.string().length(11, {
-      message: "연락처는 11자리여야 합니다.",
-    }),
-    role: z
-      .enum(["admin", "user", ""])
-      .refine((value) => value !== "", "역할을 선택해주세요."),
-    password: z.string()
-      .min(6, {
-        message: "비밀번호는 최소 6글자 이상이어야 합니다.",
-      })
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*#?&])[a-zA-Z0-9@$!%*#?&]{6,}$/
-      ,"비밀번호는 최소 6자 이상, 영문, 숫자, 특수문자를 포함해야 합니다."),
-    passwordConfirm: z.string()
-    .min(6, {
-      message: "비밀번호는 최소 6글자 이상이어야 합니다.",
-    })
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*#?&])[a-zA-Z0-9@$!%*#?&]{6,}$/
-    ,"비밀번호는 최소 6자 이상, 영문, 숫자, 특수문자를 포함해야 합니다."),
-  });
-
   // useForm을 사용하여 form을 만들어줍니다.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
