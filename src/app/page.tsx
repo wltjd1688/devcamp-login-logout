@@ -6,6 +6,7 @@ import { z } from "zod";
 import { singUpFormSchema } from "@/vaildators/singup-schema";
 import { ModeToggle } from "@/components/mode-toggle";
 import { ArrowRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -152,6 +153,28 @@ export default function Home() {
                     )}
                   />
                 </motion.div>
+                <Button
+                  type="button"
+                  className={cn({ hidden: step === 1 })}
+                  onClick={() => {
+                    form.trigger(["phone", "email", "username", "role"]);
+                    const phoneState = form.getFieldState("phone");
+                    const emailState = form.getFieldState("email");
+                    const usernameState = form.getFieldState("username");
+                    const roleState = form.getFieldState("role");
+
+                    if (!phoneState.isDirty || phoneState.invalid) return;
+                    if (!emailState.isDirty || emailState.invalid) return;
+                    if (!usernameState.isDirty || usernameState.invalid)
+                      return;
+                    if (!roleState.isDirty || roleState.invalid) return;
+
+                    setStep(1);
+                  }}
+                >
+                  다음 단계로
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
                 <motion.div
                   className={cn("space-y-3 absolute top-0 left-0 right-0")}
                   animate={{ translateX: `${(1 - step) * 100}%` }}
@@ -185,31 +208,8 @@ export default function Home() {
                     )}
                   />
                 </motion.div>
-                <div className={"flex gap-2"}>
                   <Button className={cn({ hidden: step === 0 })} type="submit">
                     계정 등록하기
-                  </Button>
-                  <Button
-                    type="button"
-                    className={cn({ hidden: step === 1 })}
-                    onClick={() => {
-                      form.trigger(["phone", "email", "username", "role"]);
-                      const phoneState = form.getFieldState("phone");
-                      const emailState = form.getFieldState("email");
-                      const usernameState = form.getFieldState("username");
-                      const roleState = form.getFieldState("role");
-
-                      if (!phoneState.isDirty || phoneState.invalid) return;
-                      if (!emailState.isDirty || emailState.invalid) return;
-                      if (!usernameState.isDirty || usernameState.invalid)
-                        return;
-                      if (!roleState.isDirty || roleState.invalid) return;
-
-                      setStep(1);
-                    }}
-                  >
-                    다음 단계로
-                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                   <Button
                     type="button"
@@ -219,9 +219,9 @@ export default function Home() {
                       setStep(0);
                     }}
                   >
+                  <ArrowLeft className="w-4 h-4 mr-2"/>
                     이전 단계로
                   </Button>
-                </div>
               </form>
             </CardContent>
           </Form>
