@@ -54,7 +54,6 @@ Are you using React Server Components? › no / yes
 zod
 ```
 npm install zod 
-
 ```
 React Hook Form
 ```
