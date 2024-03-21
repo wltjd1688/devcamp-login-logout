@@ -99,25 +99,14 @@ export default function StertMembership() {
 
   // form을 제출했을 때 실행되는 함수
   function onSubmit(data: z.infer<typeof singUpFormSchema>) {
-    const errors = [];
-    // 각 필드가 비어 있는지 확인하여 errors 배열에 추가합니다.
-    if (data.username === "") errors.push("이름");
-    if (data.nickname === "") errors.push("닉네임");
-    if (data.email === "") errors.push("이메일");
-    if (data.phone === "") errors.push("연락처");
-    if (data.password === "") errors.push("비밀번호");
-    if (data.passwordConfirm === "") errors.push("비밀번호 확인");
 
-    // 에러가 있다면 토스트를 통해 지적합니다.
-    if (errors.length > 0) {
-      const errorMessage = errors.join(", ") + "을(를) 입력해주세요.";
+    if (data.password === data.passwordConfirm) {
+      alert(JSON.stringify(data, null, 2));
+    } else {
       toast({
         title: "비밀번호가 일치하지 않습니다.",
         variant: "destructive",
       });
-    } else {
-      // 에러가 없다면 form 데이터를 출력합니다.
-      alert(JSON.stringify(data, null, 2));
     }
   }
 
