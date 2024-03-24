@@ -134,3 +134,64 @@ _기울임_: 지연
 > **오늘 할 일**
 >
 > 1. 배포해보기(AWS)
+>    1. 인스턴스 생성(EC2에서 인스턴스 생성하기)
+>       1. 이름: devcamp_first
+>       2. 애플리케이션 및 OS 이미지: Ubuntu
+>          - Amazon Machine Image(AMI)에서 프리 티어 사용
+>       3. 인스턴스 유형도 프리 티어 사용(t2.micro)
+>       4. 키 페어(로그인) 생성
+>       5. 네트워크 설정
+>          - 보안 그룹 생성에서
+>             - 다음에서 SSH 트래픽 허용
+>             - 이너넷에서 HTTP 트래픽 허용
+>       6. 인스턴스 시작버튼 클릭
+>    2. 생성한 인스턴스에서 보안탭에 들어가 인바운드 규칙 편집을 통해 3000포트를 허용한다.
+>    3. 터미널에 들어가서 배포전 준비를 한다.
+>       - 터미널에서 aws랑 연동시킴
+>          ```
+>          sudo chmod 400 [위에서 생성한 키 페어 경로를 포함해 작성하거나 마우스로 끌어오기]
+>          ssh -i [키 페어가져오기, 방법은 위와 동일] ubuntu@[AWS에 적혀있는 아이피(퍼블릭 IPv4 주소)적기]
+>          ```
+>       - 패키지 매니저 최신으로 업데이트
+>          ```
+>          sudo apt update
+>          sudo apt upgrade
+>          sudo apt-get update
+>          sudo apt-get upgrade
+>          ```
+>       - nvm 설치
+>          ```
+>          // nvm 설치
+>          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+>          // nvm 활설화
+>          . ~/.nvm/nvm.sh
+>          // 최신 버전의 node 설치
+>          nvm install node
+>          또는 
+>          nvm install -- lts
+>          ```
+>       - node랑 npm버전이 출력되는지 확인
+>         ```
+>         ~$ node -v
+>         v20.11.1
+>         ~$ npm -v
+>         10.2.4
+>         ```
+>       - git clone 으로 프로젝트 복사하기
+>         ```
+>         git clone [https//....]
+>         ```
+>       - 프로젝트 폴더에 들어가서 빌드하고 시작해보기
+>         ```
+>         npm build
+>         npm start
+>         ```
+> 2. 무중단 배포(pm2)
+>    - pm2설치
+>      ```
+>      npm install pm2 -g
+>      ```
+>    - pm2시작
+>      ```
+>      pm2 start npm -- start
+>      ```
